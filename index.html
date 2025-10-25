@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>真心话大冒险 - Truth or Dare</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* ========== 登录注册页面样式 ========== */
+        .auth-container {
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            width: 100%;
+            max-width: 900px;
+            min-height: 550px;
+            display: flex;
+            position: relative;
+        }
+
+        .welcome-panel {
+            flex: 1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 60px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-panel::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .welcome-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .welcome-panel h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .welcome-panel .emoji {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .welcome-panel p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            line-height: 1.6;
+        }
+
+        .form-panel {
+            flex: 1;
+            padding: 50px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-header h2 {
+            color: #667eea;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .form-header p {
+            color: #999;
+            font-size: 0.95rem;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            background: #f5f5f5;
+            padding: 5px;
+            border-radius: 15px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: transparent;
+            color: #666;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .form-section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 1.1rem;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 14px 15px 14px 45px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .birth-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 10px;
+        }
+
+        .birth-row input {
+            padding-left: 15px;
+        }
+
+        .gender-options {
+            display: flex;
+            gap: 15px;
+        }
+
+        .gender-option {
+            flex: 1;
+            position: relative;
+        }
+
+        .gender-option input[type="radio"] {
+            display: none;
+        }
+
+        .gender-option label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #fafafa;
+            font-weight: 600;
+        }
+
+        .gender-option input[type="radio"]:checked + label {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .message {
+            padding: 14px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: none;
+            text-align: center;
+            font-weight: 500;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.error {
+            background: #fee;
+            color: #c33;
+            border: 2px solid #fcc;
+        }
+
+        .message.success {
+            background: #efe;
+            color: #3c3;
+            border: 2px solid #cfc;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ========== 主应用界面样式 ========== */
+        .app-container {
+            display: none;
+            width: 100%;
+            max-width: 1400px;
+            height: 90vh;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .app-container.active {
+            display: flex;
+        }
+
+        /* 侧边栏 */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
+        }
+
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .user-info-sidebar {
+            flex: 1;
+        }
+
+        .user-greeting {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            margin-bottom: 3px;
+        }
+
+        .user-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .exp-bar-container {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        .exp-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 0.85rem;
+        }
+
+        .exp-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .exp-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ffd700, #ffed4e);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        .nav-menu {
+            flex: 1;
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            padding: 15px 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border-left: 4px solid white;
+        }
+
+        .nav-item i {
+            font-size: 1.2rem;
+            width: 25px;
+        }
+
+        .sidebar-footer {
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .logout-btn {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .logout-btn:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        /* 主内容区 */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .content-header {
+            padding: 25px 30px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .content-header h1 {
+            color: #333;
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        .content-header p {
+            color: #999;
+            font-size: 0.95rem;
+        }
+
+        .content-body {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            background: #f8f9fa;
+        }
+
+        .page-section {
+            display: none;
+        }
+
+        .page-section.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* 首页内容 */
+        .home-page {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .welcome-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+
+        .welcome-card h2 {
+            color: #667eea;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .welcome-card .time-greeting {
+            font-size: 1.3rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .welcome-card .fun-text {
+            font-size: 1.1rem;
+            color: #999;
+            line-height: 1.8;
+        }
+
+        /* 猫咪互动区 */
+        .cat-interaction {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cat-interaction::before {
+            content: '🍃';
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.3;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .cat-interaction::before {
+            top: 20px;
+            left: 30px;
+            animation-delay: 0s;
+        }
+
+        .cat-interaction::after {
+            content: '🍂';
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.3;
+            top: 60px;
+            right: 40px;
+            animation: float 6s ease-in-out infinite;
+            animation-delay: 2s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+
+        .cat-title {
+            text-align: center;
+            font-size: 1.8rem;
+            color: #667eea;
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+
+        .cat-stage {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            position: relative;
+            min-height: 250px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .cat {
+            font-size: 6rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: walk 3s ease-in-out infinite;
+            user-select: none;
+        }
+
+        .cat:hover {
+            transform: scale(1.1);
+        }
+
+        .cat:active {
+            transform: scale(0.95);
+        }
+
+        @keyframes walk {
+            0%, 100% { transform: translateX(-30px); }
+            50% { transform: translateX(30px); }
+        }
+
+        .cat-actions {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .cat-btn {
+            padding: 15px 40px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .pet-btn {
+            background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);
+            color: white;
+        }
+
+        .pet-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(108, 92, 231, 0.3);
+        }
+
+        .feed-btn {
+            background: linear-gradient(135deg, #fd79a8 0%, #e84393 100%);
+            color: white;
+        }
+
+        .feed-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(232, 67, 147, 0.3);
+        }
+
+        .feed-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .exp-notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: rgba(0, 0, 0, 0.9);
+            color: #ffd700;
+            padding: 30px 50px;
+            border-radius: 20px;
+            font-size: 2rem;
+            font-weight: 700;
+            z-index: 10000;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            animation: popNotification 1.5s ease;
+        }
+
+        @keyframes popNotification {
+            0% { transform: translate(-50%, -50%) scale(0); }
+            50% { transform: translate(-50%, -50%) scale(1.2); }
+            70% { transform: translate(-50%, -50%) scale(1); }
+            100% { transform: translate(-50%, -50%) scale(0); }
+        }
+
+        /* 其他页面占位 */
+        .placeholder-page {
+            background: white;
+            border-radius: 20px;
+            padding: 60px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .placeholder-page i {
+            font-size: 5rem;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .placeholder-page h2 {
+            color: #333;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .placeholder-page p {
+            color: #999;
+            font-size: 1.1rem;
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .auth-container {
+                flex-direction: column;
+            }
+
+            .welcome-panel {
+                padding: 40px 20px;
+                min-height: 200px;
+            }
+
+            .welcome-panel h1 {
+                font-size: 2rem;
+            }
+
+            .welcome-panel .emoji {
+                font-size: 3rem;
+            }
+
+            .form-panel {
+                padding: 30px 20px;
+            }
+
+            .birth-row {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+            }
+
+            .app-container {
+                flex-direction: column;
+                height: auto;
+                min-height: 90vh;
+            }
+
+            .cat {
+                font-size: 4rem;
+            }
+
+            .cat-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 登录注册容器 -->
+    <div class="auth-container" id="authContainer">
+        <div class="welcome-panel">
+            <div class="welcome-content">
+                <div class="emoji">🎭</div>
+                <h1>真心话大冒险</h1>
+                <p>Truth or Dare</p>
+                <p style="margin-top: 20px; font-size: 1rem;">勇敢面对挑战，诚实表达内心</p>
+            </div>
+        </div>
+
+        <div class="form-panel">
+            <div class="form-header">
+                <h2>欢迎回来！</h2>
+                <p>登录或注册开始你的冒险之旅</p>
+            </div>
+
+            <div class="tab-buttons">
+                <button class="tab-btn active" onclick="switchTab('login')">
+                    <i class="fas fa-sign-in-alt"></i> 登录
+                </button>
+                <button class="tab-btn" onclick="switchTab('register')">
+                    <i class="fas fa-user-plus"></i> 注册
+                </button>
+            </div>
+
+            <div id="message" class="message"></div>
+
+            <!-- 登录表单 -->
+            <div id="loginForm" class="form-section active">
+                <form onsubmit="handleLogin(event)">
+                    <div class="input-group">
+                        <label>用户名 / 用户ID</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="loginUsername" required placeholder="请输入用户名或用户ID">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>密码</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="loginPassword" required placeholder="请输入密码">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-sign-in-alt"></i> 立即登录
+                    </button>
+                </form>
+            </div>
+
+            <!-- 注册表单 -->
+            <div id="registerForm" class="form-section">
+                <form onsubmit="handleRegister(event)">
+                    <div class="input-group">
+                        <label>用户名 *</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="regUsername" required placeholder="设置你的用户名">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>密码 *</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="regPassword" required placeholder="设置密码">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>生日 *</label>
+                        <div class="birth-row">
+                            <input type="number" id="birthYear" required placeholder="年份" min="1900" max="2025">
+                            <input type="number" id="birthMonth" required placeholder="月" min="1" max="12">
+                            <input type="number" id="birthDay" required placeholder="日" min="1" max="31">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>年级 *</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-graduation-cap"></i>
+                            <select id="grade" required>
+                                <option value="">请选择年级</option>
+                                <option value="1">一年级</option>
+                                <option value="2">二年级</option>
+                                <option value="3">三年级</option>
+                                <option value="4">四年级</option>
+                                <option value="5">五年级</option>
+                                <option value="6">六年级</option>
+                                <option value="7">七年级</option>
+                                <option value="8">八年级</option>
+                                <option value="9">九年级</option>
+                                <option value="10">十年级</option>
+                                <option value="11">十一年级</option>
+                                <option value="12">十二年级</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>性别 *</label>
+                        <div class="gender-options">
+                            <div class="gender-option">
+                                <input type="radio" name="gender" value="male" id="male" required>
+                                <label for="male">
+                                    <i class="fas fa-mars"></i> 男生
+                                </label>
+                            </div>
+                            <div class="gender-option">
+                                <input type="radio" name="gender" value="female" id="female" required>
+                                <label for="female">
+                                    <i class="fas fa-venus"></i> 女生
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>手机号（可选）</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-phone"></i>
+                            <input type="tel" id="phone" placeholder="请输入手机号">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-rocket"></i> 立即注册
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主应用容器 -->
+    <div class="app-container" id="appContainer">
+        <!-- 侧边栏 -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-info-sidebar">
+                        <div class="user-greeting" id="sidebarGreeting">Hey</div>
+                        <div class="user-name" id="sidebarUsername">用户</div>
+                    </div>
+                </div>
+                <div class="exp-bar-container">
+                    <div class="exp-info">
+                        <span><i class="fas fa-star"></i> 经验值</span>
+                        <span id="expDisplay">0 XP</span>
+                    </div>
+                    <div class="exp-bar">
+                        <div class="exp-fill" id="expFill" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-menu">
+                <div class="nav-item active" onclick="navigateTo('home')">
+                    <i class="fas fa-home"></i>
+                    <span>首页</span>
+                </div>
+                <div class="nav-item" onclick="navigateTo('search')">
+                    <i class="fas fa-search"></i>
+                    <span>搜索</span>
+                </div>
+                <div class="nav-item" onclick="navigateTo('chat')">
+                    <i class="fas fa-comments"></i>
+                    <span>聊天</span>
+                </div>
+                <div class="nav-item" onclick="navigateTo('game')">
+                    <i class="fas fa-gamepad"></i>
+                    <span>游戏</span>
+                </div>
+                <div class="nav-item" onclick="navigateTo('settings')">
+                    <i class="fas fa-cog"></i>
+                    <span>设置</span>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>退出登录</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- 主内容区 -->
+        <div class="main-content">
+            <div class="content-header">
+                <h1 id="pageTitle">首页</h1>
+                <p id="pageSubtitle">欢迎来到真心话大冒险</p>
+            </div>
+
+            <div class="content-body">
+                <!-- 首页 -->
+                <div class="page-section active" id="homePage">
+                    <div class="home-page">
+                        <div class="welcome-card">
+                            <h2>🎉 欢迎来到真心话大冒险！</h2>
+                            <p class="time-greeting" id="timeGreeting">你好！祝你有美好的一天！</p>
+                            <p class="fun-text">
+                                在这里，你可以和朋友们一起玩真心话大冒险游戏，<br>
+                                诚实回答问题，勇敢接受挑战，创造难忘的回忆！✨
+                            </p>
+                        </div>
+
+                        <div class="cat-interaction">
+                            <h3 class="cat-title">🐱 可爱的小猫咪</h3>
+                            <div class="cat-stage">
+                                <div class="cat" onclick="petCat()">🐈</div>
+                            </div>
+                            <div class="cat-actions">
+                                <button class="cat-btn pet-btn" onclick="petCat()">
+                                    <i class="fas fa-hand-paper"></i>
+                                    <span>摸摸猫 (+10 XP)</span>
+                                </button>
+                                <button class="cat-btn feed-btn" id="feedBtn" onclick="feedCat()">
+                                    <i class="fas fa-fish"></i>
+                                    <span>喂猫 (+20 XP)</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 搜索页 -->
+                <div class="page-section" id="searchPage">
+                    <div class="placeholder-page">
+                        <i class="fas fa-search"></i>
+                        <h2>搜索功能</h2>
+                        <p>即将推出，敬请期待...</p>
+                    </div>
+                </div>
+
+                <!-- 聊天页 -->
+                <div class="page-section" id="chatPage">
+                    <div class="placeholder-page">
+                        <i class="fas fa-comments"></i>
+                        <h2>聊天功能</h2>
+                        <p>即将推出，敬请期待...</p>
+                    </div>
+                </div>
+
+                <!-- 游戏页 -->
+                <div class="page-section" id="gamePage">
+                    <div class="placeholder-page">
+                        <i class="fas fa-gamepad"></i>
+                        <h2>游戏大厅</h2>
+                        <p>即将推出，敬请期待...</p>
+                    </div>
+                </div>
+
+                <!-- 设置页 -->
+                <div class="page-section" id="settingsPage">
+                    <div class="placeholder-page">
+                        <i class="fas fa-cog"></i>
+                        <h2>设置</h2>
+                        <p>即将推出，敬请期待...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentUser = null;
+
+        // 页面加载时检查自动登录
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedUser = localStorage.getItem('truthOrDareUser');
+            if (savedUser) {
+                try {
+                    currentUser = JSON.parse(savedUser);
+                    showApp();
+                } catch (e) {
+                    localStorage.removeItem('truthOrDareUser');
+                }
+            }
+        });
+
+        // 切换登录/注册标签
+        function switchTab(tab) {
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            const tabs = document.querySelectorAll('.tab-btn');
+            
+            tabs.forEach(btn => btn.classList.remove('active'));
+            
+            if (tab === 'login') {
+                loginForm.classList.add('active');
+                registerForm.classList.remove('active');
+                tabs[0].classList.add('active');
+            } else {
+                registerForm.classList.add('active');
+                loginForm.classList.remove('active');
+                tabs[1].classList.add('active');
+            }
+            
+            hideMessage();
+        }
+
+        // 显示消息
+        function showMessage(text, type) {
+            const messageEl = document.getElementById('message');
+            messageEl.className = `message ${type}`;
+            const icon = type === 'error' ? 'fa-exclamation-circle' : 'fa-check-circle';
+            messageEl.innerHTML = `<i class="fas ${icon}"></i> ${text}`;
+            messageEl.style.display = 'block';
+        }
+
+        // 隐藏消息
+        function hideMessage() {
+            document.getElementById('message').style.display = 'none';
+        }
+
+        // 处理登录
+        async function handleLogin(event) {
+            event.preventDefault();
+            hideMessage();
+
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            const submitBtn = event.target.querySelector('.submit-btn');
+            const originalText = submitBtn.innerHTML;
+
+            submitBtn.innerHTML = '<span class="loading"></span> 登录中...';
+            submitBtn.disabled = true;
+
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    currentUser = result;
+                    localStorage.setItem('truthOrDareUser', JSON.stringify(result));
+                    showMessage('登录成功！', 'success');
+                    
+                    setTimeout(() => {
+                        showApp();
+                    }, 800);
+                } else {
+                    showMessage(result.error || '登录失败，请重试', 'error');
+                }
+            } catch (error) {
+                showMessage('网络错误，请检查连接后重试', 'error');
+            } finally {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        }
+
+        // 处理注册
+        async function handleRegister(event) {
+            event.preventDefault();
+            hideMessage();
+
+            const formData = {
+                username: document.getElementById('regUsername').value,
+                password: document.getElementById('regPassword').value,
+                birthYear: parseInt(document.getElementById('birthYear').value),
+                birthMonth: parseInt(document.getElementById('birthMonth').value),
+                birthDay: parseInt(document.getElementById('birthDay').value),
+                grade: parseInt(document.getElementById('grade').value),
+                phone: document.getElementById('phone').value,
+                gender: document.querySelector('input[name="gender"]:checked').value
+            };
+
+            const submitBtn = event.target.querySelector('.submit-btn');
+            const originalText = submitBtn.innerHTML;
+
+            submitBtn.innerHTML = '<span class="loading"></span> 注册中...';
+            submitBtn.disabled = true;
+
+            try {
+                const response = await fetch('/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    showMessage(`注册成功！您的用户ID是：${result.userId}`, 'success');
+                    
+                    // 自动登录
+                    setTimeout(async () => {
+                        const loginResponse = await fetch('/login', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ 
+                                username: formData.username, 
+                                password: formData.password 
+                            })
+                        });
+
+                        if (loginResponse.ok) {
+                            currentUser = await loginResponse.json();
+                            localStorage.setItem('truthOrDareUser', JSON.stringify(currentUser));
+                            showApp();
+                        }
+                    }, 1500);
+                } else {
+                    showMessage(result.error || '注册失败，请重试', 'error');
+                }
+            } catch (error) {
+                showMessage('网络错误，请检查连接后重试', 'error');
+            } finally {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        }
+
+        // 显示应用界面
+        function showApp() {
+            document.getElementById('authContainer').style.display = 'none';
+            document.getElementById('appContainer').classList.add('active');
+            
+            // 更新用户信息
+            updateUserInfo();
+            updateTimeGreeting();
+            checkFeedStatus();
+        }
+
+        // 更新用户信息
+        function updateUserInfo() {
+            const hour = new Date().getHours();
+            let greeting = 'Hey';
+            if (hour >= 5 && hour < 12) greeting = 'Hey, 早上好';
+            else if (hour >= 12 && hour < 14) greeting = 'Hey, 中午好';
+            else if (hour >= 14 && hour < 18) greeting = 'Hey, 下午好';
+            else if (hour >= 18 && hour < 22) greeting = 'Hey, 晚上好';
+            else greeting = 'Hey, 夜深了';
+
+            document.getElementById('sidebarGreeting').textContent = greeting;
+            document.getElementById('sidebarUsername').textContent = currentUser.username;
+            
+            const exp = currentUser.experience || 0;
+            document.getElementById('expDisplay').textContent = `${exp} XP`;
+            
+            // 经验条（每100经验为一级）
+            const expPercent = (exp % 100);
+            document.getElementById('expFill').style.width = `${expPercent}%`;
+        }
+
+        // 更新时间问候
+        function updateTimeGreeting() {
+            const hour = new Date().getHours();
+            let greeting = '';
+            
+            if (hour >= 5 && hour < 12) {
+                greeting = '早上好！☀️ 新的一天开始了，祝你有美好的上午！';
+            } else if (hour >= 12 && hour < 14) {
+                greeting = '中午好！🌤️ 该吃午饭啦，记得好好休息！';
+            } else if (hour >= 14 && hour < 18) {
+                greeting = '下午好！🌅  继续加油，美好的下午时光！';
+            } else if (hour >= 18 && hour < 22) {
+                greeting = '晚上好！🌙 辛苦了一天，好好放松一下吧！';
+            } else {
+                greeting = '夜深了！🌃 注意休息，不要熬夜哦！';
+            }
+            
+            document.getElementById('timeGreeting').textContent = greeting;
+        }
+
+        // 导航切换
+        function navigateTo(page) {
+            // 更新导航高亮
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.closest('.nav-item').classList.add('active');
+
+            // 更新页面标题
+            const titles = {
+                home: { title: '首页', subtitle: '欢迎来到真心话大冒险' },
+                search: { title: '搜索', subtitle: '搜索用户和内容' },
+                chat: { title: '聊天', subtitle: '与好友畅聊' },
+                game: { title: '游戏', subtitle: '开始你的冒险之旅' },
+                settings: { title: '设置', subtitle: '个性化你的体验' }
+            };
+
+            document.getElementById('pageTitle').textContent = titles[page].title;
+            document.getElementById('pageSubtitle').textContent = titles[page].subtitle;
+
+            // 切换页面内容
+            document.querySelectorAll('.page-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(`${page}Page`).classList.add('active');
+        }
+
+        // 摸猫
+        async function petCat() {
+            try {
+                const response = await fetch('/pet-cat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId: currentUser.userId })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    currentUser.experience = result.experience;
+                    localStorage.setItem('truthOrDareUser', JSON.stringify(currentUser));
+                    updateUserInfo();
+                    showExpNotification(result.message);
+                }
+            } catch (error) {
+                console.error('摸猫失败:', error);
+            }
+        }
+
+        // 喂猫
+        async function feedCat() {
+            try {
+                const response = await fetch('/feed-cat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId: currentUser.userId })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    currentUser.experience = result.experience;
+                    currentUser.lastFeedTime = new Date().toISOString();
+                    localStorage.setItem('truthOrDareUser', JSON.stringify(currentUser));
+                    updateUserInfo();
+                    showExpNotification(result.message);
+                    
+                    // 禁用喂猫按钮
+                    const feedBtn = document.getElementById('feedBtn');
+                    feedBtn.disabled = true;
+                    feedBtn.innerHTML = '<i class="fas fa-check"></i> <span>今日已喂</span>';
+                } else {
+                    showExpNotification(result.error);
+                }
+            } catch (error) {
+                console.error('喂猫失败:', error);
+            }
+        }
+
+        // 检查喂猫状态
+        function checkFeedStatus() {
+            if (!currentUser.lastFeedTime) return;
+            
+            const now = new Date();
+            const today = now.toISOString().split('T')[0];
+            const lastFeed = currentUser.lastFeedTime.split('T')[0];
+            
+            if (lastFeed === today) {
+                const feedBtn = document.getElementById('feedBtn');
+                feedBtn.disabled = true;
+                feedBtn.innerHTML = '<i class="fas fa-check"></i> <span>今日已喂</span>';
+            }
+        }
+
+        // 显示经验通知
+        function showExpNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'exp-notification';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 1500);
+        }
+
+        // 退出登录
+        function logout() {
+            if (confirm('确定要退出登录吗？')) {
+                localStorage.removeItem('truthOrDareUser');
+                location.reload();
+            }
+        }
+    </script>
+</body>
+</html>
